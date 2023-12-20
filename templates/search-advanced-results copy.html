@@ -1,0 +1,86 @@
+{% extends "records/templates/template-records.html" %}
+{% load static %}
+
+{% block title %}Advanced Search Results{% endblock %}
+
+{% block content %}
+<h2>Advanced Search Results</h2>
+{% if clients %}
+    <div class="table-responsive">
+        <table class="table table-sm table-striped">
+            <thead class="table-dark">
+                <tr class="text-center">
+                    <th scope="col">Name</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Status</th>
+{#                    {% if email %}#}
+                        <th scope="col">Email</th>
+{#                    {% endif %}#}
+{#                    {% if phone %}#}
+                        <th scope="col">Phone</th>
+{#                    {% endif %}#}
+{#                    {% if dcs %}#}
+                        <th scope="col">DCS</th>
+{#                    {% endif %}#}
+                </tr>
+            </thead>
+            <tbody>
+                {% for client in clients %}
+                    {% if 'records.'|add:client.primary_location.lower in perms or perms.records.all_clients %}
+                        <tr class="text-center">
+                            <td><a href="{% url 'records:detail' client.id %}">{{ client }}</a></td>
+                            <td>{{ client.primary_location }}</td>
+                            <td>{{ client.get_current_status_display }}</td>
+    {#                        {% if email %}#}
+                                <td>{{ client.email }}</td>
+    {#                        {% endif %}#}
+    {#                        {% if phone %}#}
+                                <td>{{ client.phone }}</td>
+    {#                        {% endif %}#}
+    {#                        {% if dcs %}#}
+                                <td>{{ client.dcs }}</td>
+    {#                        {% endif %}#}
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+{% if referrals %}
+    <div class="table-responsive">
+        <table class="table table-sm table-striped">
+            <thead class="table-dark">
+                <tr class="text-center">
+                    <th scope="col">Agency</th>
+                    <th scope="col">Name</th>
+{#                    {% if ref_email %}#}
+                        <th scope="col">Email</th>
+{#                    {% endif %}#}
+{#                    {% if ref_phone %}#}
+                        <th scope="col">Phone</th>
+{#                    {% endif %}#}
+                </tr>
+            </thead>
+            <tbody>
+                {% for ref in referrals %}
+                    <tr class="text-center">
+                        <td><a href="{% url 'records:ref_detail' ref.id %}">{{ ref.agency }}</a></td>
+                        <td>{{ ref.full_name }}</td>
+{#                        {% if ref_email %}#}
+                            <td>{{ ref.email }}</td>
+{#                        {% endif %}#}
+{#                        {% if ref_phone %}#}
+                            <td>{{ ref.phone }}</td>
+{#                        {% endif %}#}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+{% if not clients and not referrals %}
+<h4>No Results Found</h4>
+{% endif %}
+{% include 'records/snippits/back-button.html' %}
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "records/templates/template-records.html" %}
+{% load static %}
+
+{% block title %}Advanced Search{% endblock %}
+
+{% block content %}
+<h2>Advanced Search</h2>
+<form action="{% url 'records:advanced-search-results' %}" method="post">
+    {% csrf_token %}
+    <div class="row mb-3">
+        <div class="col-6 col-lg-3" id="search_type">
+            {{ form.search_type.label_tag }}{{ form.search_type }}
+        </div>
+    </div>
+    <div class="form-check form-check-inline">
+        <label class="form-check-label me-2" for="contains">Contains Search:</label>
+        <input class="form-check-input" type="checkbox" id="contains" name="contains">
+    </div>
+
+    <fieldset id="clients">
+        <legend><h3>Search Clients</h3></legend>
+        <div class="row mb-3">
+            <div class="col-6 col-lg-3">
+                {{ form.f_name.label_tag }}{{ form.f_name }}
+            </div>
+            <div class="col-6 col-lg-3">
+                {{ form.l_name.label_tag}}{{ form.l_name }}
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-6 col-lg-3">
+                {{ form.phone.label_tag}}{{ form.phone }}
+            </div>
+            <div class="col-6 col-lg-3">
+                {{ form.email.label_tag}}{{ form.email }}
+            </div>
+        </div>
+        <div class="form-check form-check-inline">
+            <label class="form-check-label mr-2" for="dcs">DCS Clients Only:</label>
+            <input class="form-check-input" type="checkbox" id="dcs" name="dcs">
+        </div>
+        <div class="row mb-3">
+            <div class="col-6 col-lg-3">
+                {{ form.locations.label_tag}}{{ form.locations }}
+                <small class="form-text text-muted">{{ form.locations.help_text }}</small>
+            </div>
+             <div class="col-6 col-lg-3">
+                {{ form.status.label_tag}}{{ form.status }}
+            </div>
+        </div>
+    </fieldset>
+    <fieldset id="referrals">
+        <legend><h3>Search Referrals</h3></legend>
+        <div class="row mb-3">
+            <div class="col-6 col-lg-3">
+                {{ form.full_name.label_tag}}{{ form.full_name }}
+            </div>
+            <div class="col-6 col-lg-3">
+                {{ form.agency.label_tag}}{{ form.agency }}
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-6 col-lg-3">
+                {{ form.ref_email.label_tag}}{{ form.ref_email }}
+            </div>
+            <div class="col-6 col-lg-3">
+                {{ form.ref_phone.label_tag}}{{ form.ref_phone }}
+            </div>
+        </div>
+
+    </fieldset>
+    <input class="btn btn-primary mb-1" type="submit" value="Search">
+</form>
+{% endblock %}
+
+{% block ext-scripts %}
+<script src="{% static 'records/js/search.js' %}"></script>
+<script>
+    var search_type = document.getElementById("id_search_type");
+    if (search_type.value == 'Clients') {
+        document.getElementById('clients').style.display="block";
+        document.getElementById('referrals').style.display="none";
+    } else {
+        document.getElementById('referrals').style.display="block";
+        document.getElementById('clients').style.display="none";
+    }
+</script>
+{% endblock %}
